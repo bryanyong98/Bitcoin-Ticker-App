@@ -1,4 +1,8 @@
 # Bitcoin Ticker Application
 
-The Bitcoin App displays the latest cryptocurrency values to the users. 
-Fetches the latest data from the BitcoinAverage API. 
+The Bitcoin Ticker App displays the latest cryptocurrency values from various countries' currencies to the users for them to monitor their investments. 
+
+
+# Features 
+- Supports monitoring of values of Bitcoin (BTC), Ethereum (ETH), Litecoin (LTC) from various countries' perspective
+
