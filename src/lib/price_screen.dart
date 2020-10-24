@@ -29,7 +29,7 @@ class _PriceScreenState extends State<PriceScreen> {
   @override
   void initState() {
     super.initState();
-    timer = Timer.periodic(Duration(seconds: 20), (timer) => getData(selectedCurrency));
+    timer = Timer.periodic(Duration(seconds: 60), (timer) => getData(selectedCurrency));
   }
 
   /// Get relevant data from the coin class.
