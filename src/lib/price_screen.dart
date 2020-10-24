@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'coin_data.dart';
 import 'dart:io' show Platform ;
+import 'package:http/http.dart' as http;
 
 /// The UI for the Bitcoin App.
 
@@ -33,11 +34,27 @@ class _PriceScreenState extends State<PriceScreen> {
     try{
       CoinData coinData = CoinData();
       dynamic data = await coinData.getCoinData(selectedCurrency);
-      print(data);
+
+      print("Getting coin data from coin data dart file..");
+
+      String requestURL = "https://apiv2.bitcoinaverage.com/indices/global/ticker/BTCUSD?apikey=YTViMDcwOTMxNjVkNDlmZDhmZTA5MTA5N2JjYzc3NTQ";
+      http.Response response = await http.get(requestURL);
+
+      if (response.statusCode == 200){
+        print(response.body);
+      }
+
+      else {
+        print("error orh!");
+      }
+
+        print(data);
 
       setState(() {
         coinValues = data;
       });
+
+      print(coinValues);
 
     } catch(e){
       print(e);

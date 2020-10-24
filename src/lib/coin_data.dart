@@ -14,6 +14,7 @@ const List<String> currenciesList = [
   'ILS',
   'INR',
   'JPY',
+  'MYR',
   'MXN',
   'NOK',
   'NZD',
@@ -32,7 +33,8 @@ const List<String> cryptoList = [
   'LTC',
 ];
 
-String url = 'https://apiv2.bitcoinaverage.com/indices/global/ticker';
+String url = 'https://rest-sandbox.coinapi.io/v1/exchangerate';
+String apiKey = "AED24F73-EF8C-4ED3-AA71-AF55A61C7AC5" ;
 
 class CoinData {
   String selectedCurrency = '';
@@ -44,7 +46,7 @@ class CoinData {
   Future getCoinData(String selectedCurrency) async{
 
     for (String crypto in cryptoList){
-      String requestURL = '$url/$crypto$selectedCurrency';
+      String requestURL = '$url/$crypto/$selectedCurrency?apikey=$apiKey';
       http.Response response = await http.get(requestURL);
 
       if (response.statusCode == 200){
@@ -52,11 +54,13 @@ class CoinData {
         var decodedData = jsonDecode(data);
 
         /// Map the crypto currency's price to the crypto currency name.
-        cryptoPrices[crypto] = decodedData['last'].toString() ;
+        cryptoPrices[crypto] = decodedData['rate'].toStringAsFixed(3) ;
+
       } else {
         print(response.statusCode);
         return;
       }
+
     }
 
     /// If all retrieval was successful, then return the MAP LIST.

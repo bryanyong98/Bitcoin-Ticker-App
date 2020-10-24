@@ -1,6 +1,6 @@
-# bitcoin
+# bitcointickerfinal
 
-A new Flutter application.
+A bitcoin ticker application
 
 ## Getting Started
 
