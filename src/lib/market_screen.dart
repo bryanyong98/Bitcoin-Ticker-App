@@ -15,6 +15,7 @@ import 'coin_card.dart';
 import 'coin_data.dart';
 import 'analytics_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 List<String> coinList   = ["Bitcoin", "Ethereum", "Litecoin", "Ripple", "Ethereum Classic", "DASH", "Amp"];
 List<String> symbol  = ["BTC", "ETH", "LTC", "XRP", "ETC", "DASH", "AMP"];
@@ -38,6 +39,8 @@ class MarketScreen extends StatefulWidget {
 class _MarketScreenState extends State<MarketScreen> {
 
   final TextEditingController _controller = new TextEditingController();
+  RefreshController _refreshController =
+  RefreshController(initialRefresh: false);
 
   String currency = 'MYR';
   Map<String, String> coinValues = {};
@@ -52,12 +55,22 @@ class _MarketScreenState extends State<MarketScreen> {
   @override
   void initState() {
     super.initState();
-    getData('MYR');
+    getData('USD');
     print('Get Data price.. ');
     getPrices('MYR', 'BTC');
 //    getData();
   }
 
+  Future<void> _onRefresh() async {
+    setState(() {
+      getData('MYR'); });
+
+    if (coinValues == null || percentChg == null){
+      _refreshController.refreshFailed();
+    } else {
+      _refreshController.refreshCompleted();
+    }
+  }
 
 
 
@@ -99,6 +112,9 @@ class _MarketScreenState extends State<MarketScreen> {
   /// Get relevant data from the coin class.
   void getData(String selectedCurrency) async{
     try{
+
+      currency = selectedCurrency;
+
       CoinData coinData = CoinData();
       dynamic prices      = await coinData.getCoinPrice(selectedCurrency);
       dynamic priceChange = await coinData.getPercentChg24Hours(selectedCurrency);
@@ -144,134 +160,139 @@ class _MarketScreenState extends State<MarketScreen> {
           centerTitle: false,
         ),
 
-        body: Column(
-          children: <Widget>[
-            Container(
-              height: 95.0,
-              child: TextField(
-                style: TextStyle(
-                  color: Colors.black,
-                  decorationColor: Colors.black,
-                ),
-                controller: _controller,
-                onChanged: (String text) {
-                  setState(() {
-                    // filter the currencies based on user input
-                    filterCurrency(text: text);
-                  });
-                },
-                decoration: InputDecoration(
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blueAccent),
+        body: SmartRefresher(
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          enablePullDown: true,
+          child: Column(
+            children: <Widget>[
+              Container(
+                height: 95.0,
+                child: TextField(
+                  style: TextStyle(
+                    color: Colors.black,
+                    decorationColor: Colors.black,
                   ),
-                  fillColor: Colors.black,
-                  border: OutlineInputBorder(
-                    borderSide: new BorderSide(color: Colors.blueAccent),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
+                  controller: _controller,
+                  onChanged: (String text) {
+                    setState(() {
+                      // filter the currencies based on user input
+                      filterCurrency(text: text);
+                    });
+                  },
+                  decoration: InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blueAccent),
                     ),
+                    fillColor: Colors.black,
+                    border: OutlineInputBorder(
+                      borderSide: new BorderSide(color: Colors.blueAccent),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10.0),
+                      ),
+                    ),
+                    hintText: 'Search currency',
+                    hintStyle: TextStyle(
+                        color: Colors.blueGrey
+                    ),
+                    icon: Icon(Icons.search, color: Colors.black, size: 25.0,),
                   ),
-                  hintText: 'Search currency',
-                  hintStyle: TextStyle(
-                      color: Colors.blueGrey
-                  ),
-                  icon: Icon(Icons.search, color: Colors.black, size: 25.0,),
                 ),
+                padding: EdgeInsets.all(25.0),
               ),
-              padding: EdgeInsets.all(25.0),
-            ),
 
-            Divider(
-              height: 2.0,
-              thickness: 1.0,
-              color: Colors.grey[350],
-            ),
+              Divider(
+                height: 2.0,
+                thickness: 1.0,
+                color: Colors.grey[350],
+              ),
 
 
-            // this will illustrate the list tiles for cryptocurrency
-            Expanded(
-              child: ListView.separated(
-                  padding: EdgeInsets.all(10),
-                  itemCount: coinFilterList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      margin: EdgeInsets.symmetric(vertical: 20),
-                      child: ListTile(
-                        onTap: (){
-                          Navigator.push(context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    AnalyticScreen(coinName: coinFilterList[index],
-                                                   symbolName: symbolFilterList[index] ,
-                                                   currentPrice: '${coinValues[symbolFilterList[index]]} $currency',
-                                    )
-                              )
-                          );
-                        },
+              // this will illustrate the list tiles for cryptocurrency
+              Expanded(
+                child: ListView.separated(
+                    padding: EdgeInsets.all(10),
+                    itemCount: coinFilterList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        margin: EdgeInsets.symmetric(vertical: 20),
+                        child: ListTile(
+                          onTap: (){
+                            Navigator.push(context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      AnalyticScreen(coinName: coinFilterList[index],
+                                                     symbolName: symbolFilterList[index] ,
+                                                     currentPrice: '${coinValues[symbolFilterList[index]]} $currency',
+                                      )
+                                )
+                            );
+                          },
 
-                        leading: CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          child: Icon(
-                            iconFilterList[index],
-                            color: colorsFilterList[index],
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            child: Icon(
+                              iconFilterList[index],
+                              color: colorsFilterList[index],
+                            ),
+
                           ),
 
-                        ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
 
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(4),
+                                child: Text(
+                                  '${coinValues[symbolFilterList[index]]} $currency',
+                                  style: TextStyle(color: Colors.black,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
 
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.all(4),
-                              child: Text(
-                                '${coinValues[symbolFilterList[index]]} $currency',
-                                style: TextStyle(color: Colors.black,
+                              SizedBox(width: 10.0,),
+
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(4, 4, 0, 4),
+                                child: Text(
+                                  '${percentChg[symbolFilterList[index]]} %', style: TextStyle(
+                                    color: checkPositive(percentChg[symbolFilterList[index]]) ? Colors.green : Colors.red,
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold),
+                                ),
                               ),
-                            ),
 
-                            SizedBox(width: 10.0,),
+                            ],
+                          ),
 
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(4, 4, 0, 4),
-                              child: Text(
-                                '${percentChg[symbolFilterList[index]]} %', style: TextStyle(
-                                  color: checkPositive(percentChg[symbolFilterList[index]]) ? Colors.green : Colors.red,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold),
-                              ),
-                            ),
+                          title: Text(
+                            '${coinFilterList[index]}',
+                            style: TextStyle(fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 19),
+                          ),
 
-                          ],
+                          subtitle: Text('${symbolFilterList[index]}',
+                            style: TextStyle(color: Colors.blueGrey,
+                                fontWeight: FontWeight.w500),),
+
                         ),
-
-                        title: Text(
-                          '${coinFilterList[index]}',
-                          style: TextStyle(fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              fontSize: 19),
-                        ),
-
-                        subtitle: Text('${symbolFilterList[index]}',
-                          style: TextStyle(color: Colors.blueGrey,
-                              fontWeight: FontWeight.w500),),
-
-                      ),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) =>
-                      Divider(
-                        height: 2.0,
-                        thickness: 1.0,
-                        color: Colors.grey[350],
-                      )
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) =>
+                        Divider(
+                          height: 2.0,
+                          thickness: 1.0,
+                          color: Colors.grey[350],
+                        )
+                ),
               ),
-            ),
 
 
-          ],
+            ],
+          ),
         ),
 
 
