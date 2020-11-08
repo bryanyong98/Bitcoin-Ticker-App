@@ -48,9 +48,10 @@ class CoinData {
 
   /// There will be three different response body in this list.
   /// Can only unlock via the 'KEY', that is BTC, ETH, LTC.
-  Map<String, String> cryptoPrices = {};
-  Map<String, String> percentChg   = {};
-
+  Map<String, String> cryptoPrices  = {};
+  Map<String, String> percentChg    = {};
+  Map<String, String> dailyPrice    = {};
+  Map<String, String> hourlyPrice   = {};
 
 
   //String requestURL = '$url/$crypto/$selectedCurrency?apikey=$apiKey';
@@ -111,5 +112,71 @@ class CoinData {
     /// If all retrieval was successful, then return the MAP LIST.
     return percentChg ;
   }
+
+
+  //////
+  Future getDailyPrice(String selectedCurrency) async{
+    for (String crypto in cryptoList){
+      String url = "https://min-api.cryptocompare.com/data/v2/histoday?fsym=$crypto&tsym=$selectedCurrency&limit=7";
+      String requestURL = '$url&api_key=$apiKey';
+
+      http.Response response = await http.get(requestURL);
+
+      if (response.statusCode == 200){
+        String data = response.body;
+
+        var decodedData = jsonDecode(data);
+
+        print("Decoding now");
+        print(decodedData['Data']['Data']);
+//        decodedData['RAW']['BTC']['MYR']['PRICE']
+
+        /// Map the crypto currency's price to the crypto currency name.
+//        dailyPrice[crypto] = decodedData['RAW']['$crypto']['$selectedCurrency']['CHANGEPCT24HOUR'].toStringAsFixed(2) ;
+
+
+      } else {
+        print(response.statusCode);
+        return;
+      }
+
+    }
+
+    /// If all retrieval was successful, then return the MAP LIST.
+    return dailyPrice ;
+  }
+
+
+  Future getHourlyPrice(String selectedCurrency) async{
+    for (String crypto in cryptoList){
+      String url = "https://min-api.cryptocompare.com/data/v2/histohour?fsym=$crypto&tsym=$selectedCurrency&limit=7";
+      String requestURL = '$url&api_key=$apiKey';
+
+      http.Response response = await http.get(requestURL);
+
+      if (response.statusCode == 200){
+        String data = response.body;
+
+        var decodedData = jsonDecode(data);
+
+        print("Hourly.. now");
+        print(decodedData['Data']['Data']);
+//        decodedData['RAW']['BTC']['MYR']['PRICE']
+
+        /// Map the crypto currency's price to the crypto currency name.
+//        dailyPrice[crypto] = decodedData['RAW']['$crypto']['$selectedCurrency']['CHANGEPCT24HOUR'].toStringAsFixed(2) ;
+
+
+      } else {
+        print(response.statusCode);
+        return;
+      }
+
+    }
+
+    /// If all retrieval was successful, then return the MAP LIST.
+    return hourlyPrice ;
+  }
+
 
 }

@@ -53,7 +53,8 @@ class _MarketScreenState extends State<MarketScreen> {
   void initState() {
     super.initState();
     getData('MYR');
-    print('Get Data.. ');
+    print('Get Data price.. ');
+    getPrices('MYR');
 //    getData();
   }
 
@@ -87,6 +88,12 @@ class _MarketScreenState extends State<MarketScreen> {
       isPositive  = true ;}
 
     return isPositive;
+  }
+
+  void getPrices(String selectedCurrency) async {
+    CoinData coinData = CoinData();
+    dynamic graph = await coinData.getHourlyPrice(selectedCurrency) ;
+
   }
 
   /// Get relevant data from the coin class.
