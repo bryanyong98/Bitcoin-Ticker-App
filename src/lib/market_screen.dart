@@ -14,6 +14,7 @@ import 'package:crypto_font_icons/crypto_font_icon_data.dart';
 import 'coin_card.dart';
 import 'coin_data.dart';
 import 'analytics_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 List<String> coinList   = ["Bitcoin", "Ethereum", "Litecoin", "Ripple", "Ethereum Classic", "DASH", "Amp"];
 List<String> symbol  = ["BTC", "ETH", "LTC", "XRP", "ETC", "DASH", "AMP"];
@@ -133,6 +134,7 @@ class _MarketScreenState extends State<MarketScreen> {
         appBar: AppBar(
           title: Text('Market', style: TextStyle(fontSize: 25),),
           backgroundColor: Color(0xFF40E0D0),
+          centerTitle: false,
         ),
 
         body: Column(
@@ -199,6 +201,7 @@ class _MarketScreenState extends State<MarketScreen> {
                               )
                           );
                         },
+
                         leading: CircleAvatar(
                           backgroundColor: Colors.transparent,
                           child: Icon(
