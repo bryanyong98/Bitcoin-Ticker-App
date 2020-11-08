@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:bezier_chart/bezier_chart.dart';
 
 
 class AnalyticScreen extends StatelessWidget {
@@ -113,26 +114,74 @@ class AnalyticScreen extends StatelessWidget {
 
                           ),
 
-                          // implement the switchable menu button
-                          Row(
-                            children: <Widget>[
+                          SizedBox(height: 10,),
 
+                          Container(
+                            width: double.infinity,
+                            height: MediaQuery.of(context).size.height / 1.8,
+                            child: BezierChart(
+                              bezierChartScale: BezierChartScale.CUSTOM,
+                              xAxisCustomValues: const [0, 3, 10, 15, 20, 25, 30, 35],
+                              series: const [
+                                BezierLine(
+                                  label: "Custom 1",
+                                  lineColor: Colors.red,
+                                  lineStrokeWidth: 4.0,
+                                  data: const [
+                                    DataPoint<double>(value: 10, xAxis: 0),
+                                    DataPoint<double>(value: 130, xAxis: 5),
+                                    DataPoint<double>(value: 50, xAxis: 10),
+                                    DataPoint<double>(value: 150, xAxis: 15),
+                                    DataPoint<double>(value: 75, xAxis: 20),
+                                    DataPoint<double>(value: 0, xAxis: 25),
+                                    DataPoint<double>(value: 5, xAxis: 30),
+                                    DataPoint<double>(value: 45, xAxis: 35),
+                                  ],
+                                ),
 
+                                BezierLine(
+                                  lineColor: Colors.blue,
+                                  lineStrokeWidth: 4.0,
+                                  label: "Custom 2",
+                                  data: const [
+                                    DataPoint<double>(value: 5, xAxis: 0),
+                                    DataPoint<double>(value: 50, xAxis: 5),
+                                    DataPoint<double>(value: 30, xAxis: 10),
+                                    DataPoint<double>(value: 30, xAxis: 15),
+                                    DataPoint<double>(value: 50, xAxis: 20),
+                                    DataPoint<double>(value: 40, xAxis: 25),
+                                    DataPoint<double>(value: 10, xAxis: 30),
+                                    DataPoint<double>(value: 30, xAxis: 35),
+                                  ],
+                                ),
+                              ],
 
-    //                      Flexible(
-    //                        flex: 2,
-    //                        child: Padding(
-    //                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-    //                            child: TabBar(
-    //                              tabs : [
-    //                                Text('Daily'),
-    //                                Text('Hourly')
-    //                              ],
-    //                            ),
-    //                        ),
-    //                      ),
-                            ],
+                              config: BezierChartConfig(
+                                bubbleIndicatorColor: Colors.green,
+                                bubbleIndicatorValueStyle: TextStyle(color: Colors.white),
+                                bubbleIndicatorLabelStyle: TextStyle(color: Colors.white),
+                                bubbleIndicatorTitleStyle: TextStyle(color: Colors.white),
+                                verticalIndicatorStrokeWidth: 1.0,
+                                showDataPoints: true,
+                                verticalIndicatorColor: Colors.black,
+                                showVerticalIndicator: true,
+                                verticalIndicatorFixedPosition: false,
+                                backgroundColor: Colors.white,
+                                footerHeight: 50,
+                                displayLinesXAxis: true,
+                                xLinesColor: Colors.red,
+                                xAxisTextStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                                snap: true,
+                              ),
+                            ) ,
                           ),
+
+
 
 
                         ],
