@@ -1,12 +1,12 @@
 
 class DailyData {
-  String time;
-  String high;
-  String low;
-  String open;
-  String volumefrom;
-  String volumeto;
-  String close;
+  int time;
+  dynamic high;
+  dynamic low;
+  dynamic open;
+  dynamic volumefrom;
+  dynamic volumeto;
+  dynamic close;
   String conversionType;
   String conversionSymbol;
 

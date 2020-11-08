@@ -1,5 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'api/dailydata.dart';
+import 'api/hourlydata.dart';
 
 /// All backend implementation of the Bitcoin Application.
 const List<String> currenciesList = [
@@ -48,10 +50,9 @@ class CoinData {
 
   /// There will be three different response body in this list.
   /// Can only unlock via the 'KEY', that is BTC, ETH, LTC.
-  Map<String, String> cryptoPrices  = {};
-  Map<String, String> percentChg    = {};
-  Map<String, String> dailyPrice    = {};
-  Map<String, String> hourlyPrice   = {};
+  Map<String, String> cryptoPrices   = {};
+  Map<String, String> percentChg     = {};
+
 
 
   //String requestURL = '$url/$crypto/$selectedCurrency?apikey=$apiKey';
@@ -114,9 +115,9 @@ class CoinData {
   }
 
 
-  //////
-  Future getDailyPrice(String selectedCurrency) async{
-    for (String crypto in cryptoList){
+  Future getDailyPrice(String selectedCurrency, String crypto) async{
+    List<DailyData> dailyPrices = [];
+
       String url = "https://min-api.cryptocompare.com/data/v2/histoday?fsym=$crypto&tsym=$selectedCurrency&limit=7";
       String requestURL = '$url&api_key=$apiKey';
 
@@ -124,31 +125,26 @@ class CoinData {
 
       if (response.statusCode == 200){
         String data = response.body;
+        var decodedData = jsonDecode(data)['Data']['Data'];
 
-        var decodedData = jsonDecode(data);
 
-        print("Decoding now");
-        print(decodedData['Data']['Data']);
-//        decodedData['RAW']['BTC']['MYR']['PRICE']
-
-        /// Map the crypto currency's price to the crypto currency name.
-//        dailyPrice[crypto] = decodedData['RAW']['$crypto']['$selectedCurrency']['CHANGEPCT24HOUR'].toStringAsFixed(2) ;
-
+        for (int i = 0; i < decodedData.length; i++) {
+          DailyData formattedData = DailyData.fromJson(decodedData[i]);
+          dailyPrices.add(formattedData);
+        }
 
       } else {
         print(response.statusCode);
-        return;
-      }
-
-    }
+        return;}
 
     /// If all retrieval was successful, then return the MAP LIST.
-    return dailyPrice ;
+    return dailyPrices ;
   }
 
 
-  Future getHourlyPrice(String selectedCurrency) async{
-    for (String crypto in cryptoList){
+  Future getHourlyPrice(String selectedCurrency, String crypto) async{
+
+      List<HourlyData> hourlyPrices = [];
       String url = "https://min-api.cryptocompare.com/data/v2/histohour?fsym=$crypto&tsym=$selectedCurrency&limit=7";
       String requestURL = '$url&api_key=$apiKey';
 
@@ -157,26 +153,19 @@ class CoinData {
       if (response.statusCode == 200){
         String data = response.body;
 
-        var decodedData = jsonDecode(data);
+        var decodedData = jsonDecode(data)['Data']['Data'];
+        print(decodedData);
 
-        print("Hourly.. now");
-        print(decodedData['Data']['Data']);
-//        decodedData['RAW']['BTC']['MYR']['PRICE']
-
-        /// Map the crypto currency's price to the crypto currency name.
-//        dailyPrice[crypto] = decodedData['RAW']['$crypto']['$selectedCurrency']['CHANGEPCT24HOUR'].toStringAsFixed(2) ;
-
+        for (int i = 0; i < decodedData.length; i++) {
+          HourlyData formattedData = HourlyData.fromJson(decodedData[i]);
+          hourlyPrices.add(formattedData);
+        }
 
       } else {
         print(response.statusCode);
-        return;
-      }
-
-    }
+        return;}
 
     /// If all retrieval was successful, then return the MAP LIST.
-    return hourlyPrice ;
+    return hourlyPrices ;
   }
-
-
 }

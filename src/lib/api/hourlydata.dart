@@ -1,12 +1,12 @@
 
 class HourlyData {
-  String time;
-  String high;
-  String low;
-  String open;
-  String volumefrom;
-  String volumeto;
-  String close;
+  int time;
+  dynamic high;
+  dynamic low;
+  dynamic open;
+  dynamic volumefrom;
+  dynamic volumeto;
+  dynamic close;
   String conversionType;
   String conversionSymbol;
 
@@ -22,6 +22,7 @@ class HourlyData {
         this.conversionSymbol});
 
   HourlyData.fromJson(Map<String, dynamic> json) {
+
     time = json['time'];
     high = json['high'];
     low = json['low'];

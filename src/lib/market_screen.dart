@@ -54,7 +54,7 @@ class _MarketScreenState extends State<MarketScreen> {
     super.initState();
     getData('MYR');
     print('Get Data price.. ');
-    getPrices('MYR');
+    getPrices('MYR', 'BTC');
 //    getData();
   }
 
@@ -90,9 +90,9 @@ class _MarketScreenState extends State<MarketScreen> {
     return isPositive;
   }
 
-  void getPrices(String selectedCurrency) async {
+  void getPrices(String selectedCurrency, crypto) async {
     CoinData coinData = CoinData();
-    dynamic graph = await coinData.getHourlyPrice(selectedCurrency) ;
+    dynamic graph = await coinData.getDailyPrice(selectedCurrency, crypto) ;
 
   }
 
