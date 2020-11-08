@@ -25,6 +25,13 @@ dependencies:
     sdk: flutter
 
   http: ^0.12.2
+  font_awesome_flutter: ^8.10.0
+  crypto_font_icons: ^0.1.0+1
+  google_fonts: ^1.1.0
+
+
+
+
 
 
 

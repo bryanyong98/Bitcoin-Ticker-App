@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
@@ -32,11 +33,13 @@ class _PriceScreenState extends State<PriceScreen> {
     timer = Timer.periodic(Duration(seconds: 60), (timer) => getData(selectedCurrency));
   }
 
+
+
   /// Get relevant data from the coin class.
   void getData(String selectedCurrency) async{
     try{
       CoinData coinData = CoinData();
-      dynamic data = await coinData.getCoinData(selectedCurrency);
+      dynamic data = await coinData.getCoinPrice(selectedCurrency);
 
       print("Getting coin data from coin data dart file..");
       print(data);
@@ -91,7 +94,7 @@ class _PriceScreenState extends State<PriceScreen> {
 
     /// place the list items in the Cupertino picker
     return CupertinoPicker(
-      backgroundColor: Colors.lightBlueAccent,
+      backgroundColor: Colors.blueAccent,
       itemExtent: 32.0,
       onSelectedItemChanged:(selectedIndex){
         print(selectedIndex) ;
@@ -108,6 +111,7 @@ class _PriceScreenState extends State<PriceScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('🤑 Coin Ticker'),
+        backgroundColor: Colors.blueAccent,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -116,7 +120,7 @@ class _PriceScreenState extends State<PriceScreen> {
           Padding(
             padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
             child: Card(
-              color: Colors.lightBlueAccent,
+              color: Colors.blueAccent,
               elevation: 5.0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
@@ -139,7 +143,7 @@ class _PriceScreenState extends State<PriceScreen> {
           Padding(
             padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
             child: Card(
-              color: Colors.lightBlueAccent,
+              color: Colors.blueAccent,
               elevation: 5.0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
@@ -162,7 +166,7 @@ class _PriceScreenState extends State<PriceScreen> {
           Padding(
             padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
             child: Card(
-              color: Colors.lightBlueAccent,
+              color: Colors.blueAccent,
               elevation: 5.0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
@@ -185,7 +189,7 @@ class _PriceScreenState extends State<PriceScreen> {
             height: 150.0,
             alignment: Alignment.center,
             padding: EdgeInsets.only(bottom: 30.0),
-            color: Colors.lightBlue,
+            color: Colors.blueAccent,
             child: Platform.isIOS ? iOSPicker() : androidButton()  ,
           )
         ],
