@@ -23,6 +23,6 @@ The Bitcoin Ticker App displays the latest cryptocurrency values from various co
 
 <p float="left">
       <img src="https://user-images.githubusercontent.com/59403437/98621250-c8953480-2341-11eb-8347-3c28d77e788f.PNG" width="30%">
-      <img src="https://user-images.githubusercontent.com/59403437/98621266-d64aba00-2341-11eb-8685-7a635a46e529.PNG" width="30%">
+      <img src="https://user-images.githubusercontent.com/59403437/98623808-693a2300-2347-11eb-9844-26a0e38a09bc.PNG" width="30%">
 </p>
 
