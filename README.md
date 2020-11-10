@@ -6,10 +6,10 @@ The Bitcoin Ticker App displays the latest cryptocurrency values from various co
 
 ## Features 
 - Supports monitoring of cryptocurrencies from various countries' perspective
-- Pull to refresh to obtain the latest market prices
+- Pull to refresh feature to obtain the latest market prices
 - Filter feature of cryptocurrencies based on keywords 
-- Supports monitoring of daily performance price charts
-- Supports monitoring of hourly performance price charts 
+- Monitoring of daily performance price charts
+- Monitoring of hourly performance price charts 
 
 <br/>
 
