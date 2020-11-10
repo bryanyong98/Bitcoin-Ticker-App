@@ -5,8 +5,11 @@ The Bitcoin Ticker App displays the latest cryptocurrency values from various co
 <br/>
 
 ## Features 
-- Supports monitoring of values of Bitcoin (BTC), Ethereum (ETH), Litecoin (LTC) from various countries' perspective
-- Periodic updates of cryptocurrency values every 1 minute to keep track of the latest changes in the market
+- Supports monitoring of cryptocurrencies from various countries' perspective
+- Pull to refresh to obtain the latest market prices
+- Filter feature of cryptocurrencies based on keywords 
+- Supports monitoring of daily performance price charts
+- Supports monitoring of hourly performance price charts 
 
 <br/>
 
