@@ -1,8 +1,11 @@
+import 'package:bitcointickerfinal/coin_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:bezier_chart/bezier_chart.dart';
+import 'api/dailydata.dart';
+import 'api/hourlydata.dart';
 
 
 class AnalyticScreen extends StatelessWidget {
@@ -10,8 +13,16 @@ class AnalyticScreen extends StatelessWidget {
   final String coinName ;
   final String symbolName;
   String currentPrice = '';
+  String currency = '' ;
 
-  AnalyticScreen({this.coinName, this.symbolName, this.currentPrice});
+
+  List<List<DataPoint<DateTime>>> dailyDataList  = [];
+//  List<List<DataPoint<DateTime>>> hourlyDataList = [];
+// get daily data low dailyDataList[2]
+
+
+
+  AnalyticScreen({this.coinName, this.symbolName, this.currentPrice, this.currency, this.dailyDataList});
 
 
   @override
@@ -47,27 +58,6 @@ class AnalyticScreen extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-    //              Container(
-    //                padding: EdgeInsets.only(
-    //                    top: 60.0, left: 30.0, right: 30.0, bottom: 30.0),
-    //                child: Column(
-    //                  crossAxisAlignment: CrossAxisAlignment.start,
-    //                  children: <Widget>[
-    //                    SizedBox(
-    //                      height: 10.0,
-    //                    ),
-    //                    Text(
-    //                      '$coinName  ($symbolName)',
-    //                      style: TextStyle(
-    //                        color: Colors.white,
-    //                        fontSize: 30.0,
-    //                        fontWeight: FontWeight.w700,
-    //                      ),
-    //                    ),
-    //
-    //                  ],
-    //                ),
-    //              ),
                   Expanded(
                     child: Container(
                       child: ListView(
@@ -116,48 +106,46 @@ class AnalyticScreen extends StatelessWidget {
 
                           SizedBox(height: 10,),
 
-                          Container(
+                          /* Check if the data point list points to null */
+                          dailyDataList[0] != null ? Container(
                             width: double.infinity,
                             height: MediaQuery.of(context).size.height / 1.8,
                             child: BezierChart(
-                              bezierChartScale: BezierChartScale.CUSTOM,
-                              xAxisCustomValues: const [0, 3, 10, 15, 20, 25, 30, 35],
-                              series: const [
+
+                              fromDate: DateTime.fromMillisecondsSinceEpoch(
+                                num.parse("1604016000" + "000"),
+                              ),
+
+                              toDate: DateTime.fromMillisecondsSinceEpoch(
+                                num.parse("1604880000" + "000"),
+                              ),
+
+                              bezierChartScale: BezierChartScale.WEEKLY,
+                              series:  [
                                 BezierLine(
-                                  label: "Custom 1",
-                                  lineColor: Colors.red,
-                                  lineStrokeWidth: 4.0,
-                                  data: const [
-                                    DataPoint<double>(value: 10, xAxis: 0),
-                                    DataPoint<double>(value: 130, xAxis: 5),
-                                    DataPoint<double>(value: 50, xAxis: 10),
-                                    DataPoint<double>(value: 150, xAxis: 15),
-                                    DataPoint<double>(value: 75, xAxis: 20),
-                                    DataPoint<double>(value: 0, xAxis: 25),
-                                    DataPoint<double>(value: 5, xAxis: 30),
-                                    DataPoint<double>(value: 45, xAxis: 35),
-                                  ],
+                                  label: "Open",
+                                  data: this.dailyDataList[0],
+                                  lineColor: Colors.black38,
+                                  lineStrokeWidth: 3,
                                 ),
 
                                 BezierLine(
-                                  lineColor: Colors.blue,
-                                  lineStrokeWidth: 4.0,
-                                  label: "Custom 2",
-                                  data: const [
-                                    DataPoint<double>(value: 5, xAxis: 0),
-                                    DataPoint<double>(value: 50, xAxis: 5),
-                                    DataPoint<double>(value: 30, xAxis: 10),
-                                    DataPoint<double>(value: 30, xAxis: 15),
-                                    DataPoint<double>(value: 50, xAxis: 20),
-                                    DataPoint<double>(value: 40, xAxis: 25),
-                                    DataPoint<double>(value: 10, xAxis: 30),
-                                    DataPoint<double>(value: 30, xAxis: 35),
-                                  ],
+                                  label: "Low",
+                                  data: this.dailyDataList[2],
+                                  lineColor: Colors.redAccent,
+                                  lineStrokeWidth: 3,
+                                ),
+
+                                BezierLine(
+                                  label: "High",
+                                  data: this.dailyDataList[1],
+                                  lineColor: Colors.lightGreenAccent,
+                                  lineStrokeWidth: 3,
                                 ),
                               ],
 
                               config: BezierChartConfig(
-                                bubbleIndicatorColor: Colors.green,
+                                bubbleIndicatorColor: Color(0xFF007ac1),
                                 bubbleIndicatorValueStyle: TextStyle(color: Colors.white),
                                 bubbleIndicatorLabelStyle: TextStyle(color: Colors.white),
                                 bubbleIndicatorTitleStyle: TextStyle(color: Colors.white),
@@ -169,6 +157,7 @@ class AnalyticScreen extends StatelessWidget {
                                 backgroundColor: Colors.white,
                                 footerHeight: 50,
                                 displayLinesXAxis: true,
+                                pinchZoom: true,
                                 xLinesColor: Colors.red,
                                 xAxisTextStyle: TextStyle(
                                   color: Colors.black,
@@ -179,11 +168,7 @@ class AnalyticScreen extends StatelessWidget {
                                 snap: true,
                               ),
                             ) ,
-                          ),
-
-
-
-
+                          ) : Container(),
                         ],
                       ),
                       padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -198,7 +183,9 @@ class AnalyticScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              Icon(Icons.email),
+
+              // Next TAB BAR
+              Text('This Page Is Still In Progress'),
 
             ],
           )

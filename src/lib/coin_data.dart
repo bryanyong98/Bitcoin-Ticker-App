@@ -96,7 +96,6 @@ class CoinData {
 
         var decodedData = jsonDecode(data);
 
-        print("Decoding now");
 //        print(decodedData);
 //        decodedData['RAW']['BTC']['MYR']['PRICE']
 
@@ -118,7 +117,7 @@ class CoinData {
   Future getDailyPrice(String selectedCurrency, String crypto) async{
     List<DailyData> dailyPrices = [];
 
-      String url = "https://min-api.cryptocompare.com/data/v2/histoday?fsym=$crypto&tsym=$selectedCurrency&limit=7";
+      String url = "https://min-api.cryptocompare.com/data/v2/histoday?fsym=$crypto&tsym=$selectedCurrency&limit=14";
       String requestURL = '$url&api_key=$apiKey';
 
       http.Response response = await http.get(requestURL);
@@ -145,7 +144,7 @@ class CoinData {
   Future getHourlyPrice(String selectedCurrency, String crypto) async{
 
       List<HourlyData> hourlyPrices = [];
-      String url = "https://min-api.cryptocompare.com/data/v2/histohour?fsym=$crypto&tsym=$selectedCurrency&limit=7";
+      String url = "https://min-api.cryptocompare.com/data/v2/histohour?fsym=$crypto&tsym=$selectedCurrency&limit=14";
       String requestURL = '$url&api_key=$apiKey';
 
       http.Response response = await http.get(requestURL);
